@@ -190,19 +190,37 @@ def write(x, results):
     cls = int(x[-1])
     color = random.choice(colors)
     label = "{0}".format(classes[cls])
-    cv2.rectangle(img, c1, c2,color, 1)
+    cv2.rectangle(img, (c1[0].item(), c1[1].item() ), (c2[0].item(), c2[1].item() ),color, 1)
     t_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_PLAIN, 1 , 1)[0]
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
-    cv2.rectangle(img, c1, c2,color, -1)
-    cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1);
+    cv2.rectangle(img, (c1[0].item(), c1[1].item() ), (c2[0].item(), c2[1].item() ),color, -1)
+    cv2.putText(img, label, (c1[0].item(), c1[1].item() + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225,255,255], 1);
     return img
 
 
 list(map(lambda x: write(x, loaded_ims), output))
 
-det_names = pd.Series(imlist).apply(lambda x: "{}/det_{}".format(args.det,x.split("/")[-1]))
+det_names = [
+    r'''.\det\dog.jpg''',
+    r'''.\det\eagle.jpg''',
+    r'''.\det\giraffe.jpg''',
+    r'''.\det\herd_of_horses.jpg''',
+    r'''.\det\img1.jpg''',
+    r'''.\det\img2.jpg''',
+    r'''.\det\img3.jpg''',
+    r'''.\det\img4.jpg''',
+    r'''.\det\messi.jpg''',
+    r'''.\det\person.jpg''',
+    r'''.\det\scream.jpg'''
+]
 
-list(map(cv2.imwrite, det_names, loaded_ims))
+for i, loaded_im in enumerate( loaded_ims ):
+    cv2.imwrite( det_names[i], loaded_im )
+
+# print( list(map(cv2.imwrite, det_names, loaded_ims)) )
+
+# print( det_names )
+# cv2.imwrite( r'''C:\Users\root\Desktop\code\python\YOLO_v3_tutorial_from_scratch\det\messi.jpg''', loaded_ims[0] )
 
 
 end = time.time()
